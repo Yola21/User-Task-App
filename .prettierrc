@@ -1,0 +1,14 @@
+{
+  "overrides": [
+    {
+      "files": ["angular.json", "nx.json", "tsconfig.base.json"],
+      "options": {
+        "jsonRecursiveSort": true
+      }
+    }
+  ],
+  "printWidth": 80,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all"
+}

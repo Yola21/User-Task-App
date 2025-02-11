@@ -1,0 +1,13 @@
+<div class="container">
+  <mat-chip-listbox aria-label="Filter selection">
+    <mat-chip-option (selectionChange)="filterTask('priority', $event)"
+      >High Priority</mat-chip-option
+    >
+    <mat-chip-option (selectionChange)="filterTask('completed', $event)"
+      >Not Complete</mat-chip-option
+    >
+    <mat-chip-option (selectionChange)="filterTask('scheduledDate', $event)"
+      >Due Today</mat-chip-option
+    >
+  </mat-chip-listbox>
+</div>

@@ -1,0 +1,20 @@
+.container {
+  justify-content: space-around;
+
+  .tasks {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 5px;
+    width: min(calc(100vw - var(--layout-padding)), var(--layout-width-max));
+    gap: var(--layout-gap-size);
+
+    mat-card {
+      &:nth-child(odd) {
+        background-color: var(--background-light-color);
+      }
+      &:nth-child(even) {
+        background-color: var(--background-dark-color);
+      }
+    }
+  }
+}

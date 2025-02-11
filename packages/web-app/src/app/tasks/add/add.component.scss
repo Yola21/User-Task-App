@@ -1,0 +1,17 @@
+.container {
+  justify-content: space-around;
+
+  form {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 5px;
+    width: min(calc(100vw - var(--layout-padding)), var(--layout-width-max));
+    gap: var(--layout-gap-size);
+
+    .action-button-row {
+      display: flex;
+      justify-content: center;
+      gap: var(--layout-gap-size);
+    }
+  }
+}

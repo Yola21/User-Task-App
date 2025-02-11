@@ -1,0 +1,27 @@
+.container {
+  justify-content: space-around;
+
+  .action-button-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: var(--layout-gap-size);
+  }
+
+  .tasks {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 5px;
+    width: min(calc(100vw - var(--layout-padding)), var(--layout-width-max));
+    gap: var(--layout-gap-size);
+
+    mat-card {
+      padding: var(--layout-padding);
+      &.complete {
+        background-color: var(--success-color);
+      }
+      .high-priority {
+        color: var(--error-color);
+      }
+    }
+  }
+}

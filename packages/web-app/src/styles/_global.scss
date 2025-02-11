@@ -1,0 +1,16 @@
+html,
+body {
+  height: 100%;
+  margin: 0px;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .material-icons {
+    font-family: 'Material Icons Outlined', 'Material Icons';
+    .mat-badge-content {
+      font-family: 'Open Sans';
+      font-size: 12px;
+    }
+  }
+}

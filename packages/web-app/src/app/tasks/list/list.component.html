@@ -1,0 +1,46 @@
+<div class="container">
+  <h1>Tasks</h1>
+  <h3>Total Tasks: {{ tasksService.tasks.length }}</h3>
+  <take-home-filters-component></take-home-filters-component>
+  <take-home-search-component></take-home-search-component>
+  <div class="action-button-row">
+    <button data-testid="add-task" mat-button (click)="onAddTask()">
+      Add Task
+    </button>
+  </div>
+  <div class="tasks">
+    <ng-container *ngFor="let item of tasksService.tasks">
+      <mat-card [class.complete]="item.completed">
+        <mat-card-title>{{ item.title }}</mat-card-title>
+        <mat-card-header>{{
+          item.scheduledDate | date : 'short'
+        }}</mat-card-header>
+        <mat-card-content>
+          {{ item.description }}
+        </mat-card-content>
+        <mat-card-footer *ngIf="item.priority === 'HIGH'">
+          <span class="high-priority">{{ item.priority }}</span>
+        </mat-card-footer>
+        <mat-card-actions *ngIf="item.uuid !== '1' && item.uuid !== '2'">
+          <button
+            *ngIf="!item.completed"
+            data-testid="complete-task"
+            color="primary"
+            mat-flat-button
+            (click)="onDoneTask(item)"
+          >
+            <mat-icon>done</mat-icon>Done
+          </button>
+          <button
+            data-testid="delete-task"
+            color="warn"
+            mat-flat-button
+            (click)="onDeleteTask(item)"
+          >
+            <mat-icon>delete</mat-icon>Delete
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

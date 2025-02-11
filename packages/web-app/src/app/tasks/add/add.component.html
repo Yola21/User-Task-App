@@ -1,0 +1,60 @@
+<div class="container">
+  <h1>Add Task</h1>
+  <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea rows="4" matInput formControlName="description"> </textarea>
+    </mat-form-field>
+    <mat-form-field data-testid="priority-form-field" floatLabel="always">
+      <mat-label>Priority</mat-label>
+      <mat-select
+        formControlName="priority"
+        data-testid="priority-select"
+        class="priority-select"
+      >
+        <mat-option *ngFor="let option of priorities" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Scheduled Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="scheduledDate"
+        [matDatepickerFilter]="dateFilter"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="action-button-row">
+      <button
+        data-testid="add-task"
+        mat-flat-button
+        color="primary"
+        [disabled]="addTaskForm.invalid"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        data-testid="cancel"
+        mat-flat-button
+        color="accent"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
