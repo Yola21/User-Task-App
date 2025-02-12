@@ -3,3 +3,9 @@
 
 // Core Styles
 @import 'global';
+
+.toast-success {
+  background-color: var(--success-color) !important;
+  color: white !important;
+  font-weight: bold;
+}

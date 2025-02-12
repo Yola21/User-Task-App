@@ -19,7 +19,7 @@
           "packages/web-app/src/favicon.ico",
           "packages/web-app/src/assets"
         ],
-        "styles": ["packages/web-app/src/styles/styles.scss"],
+        "styles": ["packages/web-app/src/styles/styles.scss", "node_modules/ngx-toastr/toastr.css"],
         "scripts": []
       },
       "configurations": {

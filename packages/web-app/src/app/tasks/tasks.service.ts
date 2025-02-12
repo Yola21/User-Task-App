@@ -41,13 +41,14 @@ export class TasksService {
       case 'priority':
         this.tasks = this.tasks.filter((task) => task.priority === 'HIGH');
         break;
-      case 'scheduledDate':
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      case 'scheduledDate': {
+        const today = new Date().toISOString().split('T')[0];
         this.tasks = this.tasks.filter((task) => {
           const taskDate = new Date(task.scheduledDate);
           return taskDate?.toISOString().split('T')[0] === today;
         });
         break;
+      }
       case 'completed':
         this.tasks = this.tasks.filter((task) => !task.completed);
     }

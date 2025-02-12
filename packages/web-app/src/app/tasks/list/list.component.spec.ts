@@ -19,6 +19,7 @@ import { StorageService } from '../../storage/storage.service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 const fakeTasks: Task[] = [
   generateTask({ uuid: '3', completed: false }),
@@ -67,6 +68,7 @@ describe('ListComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
+        ToastrModule.forRoot(),
       ],
       declarations: [ListComponent, FiltersComponent, SearchComponent],
       providers: [

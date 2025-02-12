@@ -6,6 +6,27 @@ import {
 } from '@angular/common/http/testing';
 import { StorageService } from '../storage/storage.service';
 import { Task, TaskPriority, generateTask } from '@take-home/shared';
+import Fuse from 'fuse.js';
+
+jest.mock('fuse.js', () => {
+  class MockFuse {
+    list: { title: string }[];
+    constructor(list: { title: string }[] = []) {
+      this.list = list;
+    }
+
+    search(query: string) {
+      return this.list
+        .filter((item) => item.title.includes(query))
+        .map((item) => ({ item }));
+    }
+  }
+
+  return {
+    __esModule: true,
+    default: MockFuse,
+  };
+});
 
 class MockStorageService {
   getTasks(): Promise<Task[]> {
@@ -30,6 +51,12 @@ describe('TasksService', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TasksService);
     storageService = TestBed.inject(StorageService);
+    service.tasks = [
+      generateTask({ title: 'Load App' }),
+      generateTask({ title: 'Take home assignment' }),
+      generateTask({ title: 'Thank you for your time' }),
+    ];
+    service['fuse'] = new Fuse(service.tasks, { keys: ['title'], threshold: 0.3 });
   });
 
   describe('getTasksFromApi', () => {
@@ -56,24 +83,20 @@ describe('TasksService', () => {
   });
 
   describe('getTasksFromStorage', () => {
-    it('should load tasks from storage', (done) => {
+    it('should load tasks from storage', async () => {
       jest.spyOn(storageService, 'getTasks').mockResolvedValueOnce([]);
-      service.getTasksFromStorage().then(() => {
-        expect(service.tasks).toEqual([]);
-        expect(storageService.getTasks).toHaveBeenCalledTimes(1);
-        done();
-      });
+      await service.getTasksFromStorage();
+      expect(service.tasks).toEqual([]);
+      expect(storageService.getTasks).toHaveBeenCalledTimes(1);
     });
 
-    it('should filter tasks by isArchived', (done) => {
+    it('should filter tasks by isArchived', async () => {
       jest.spyOn(storageService, 'getTasks').mockResolvedValueOnce([]);
       jest.spyOn(service, 'filterTask');
-      service.getTasksFromStorage().then(() => {
+      await service.getTasksFromStorage();
         expect(service.tasks).toEqual([]);
         expect(service.filterTask).toHaveBeenCalledTimes(1);
         expect(service.filterTask).toHaveBeenCalledWith('isArchived');
-        done();
-      });
     });
   });
 
@@ -102,26 +125,26 @@ describe('TasksService', () => {
       expect(service.tasks.length).toEqual(1);
     });
 
-    it.todo('should filter task by scheduledDate key');
+    it('should filter task by scheduledDate key', () => {
+      service.tasks = [
+        generateTask({ scheduledDate: new Date('2025-02-12') }),
+        generateTask({ scheduledDate: new Date('2025-02-13') }),
+      ];
+      service.filterTask('scheduledDate');
+      expect(service.tasks.length).toEqual(1);
+    });
+    
   });
 
   describe('searchTask', () => {
     it('should search task list for title with search term', () => {
-      service.tasks = [
-        generateTask({ title: 'Take home assignment' }),
-        generateTask({ title: 'Thank you for your time' }),
-      ];
       service.searchTask('home');
       expect(service.tasks.length).toEqual(1);
     });
 
     it('should reset task list if search term is empty', () => {
-      service.tasks = [
-        generateTask({ title: 'Take home assignment' }),
-        generateTask({ title: 'Thank you for your time' }),
-      ];
       service.searchTask('');
-      expect(service.tasks.length).toEqual(2);
+      expect(service.tasks.length).toEqual(3);
     });
 
     it.todo('should search task list for a fuzzy match on title');

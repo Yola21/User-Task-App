@@ -14,9 +14,12 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { ToastrModule } from 'ngx-toastr';
+import { MatNativeDateModule } from '@angular/material/core';
+import { TaskPriority } from '@take-home/shared';
 
 class MockStorageService {
-  updateTaskItem(): void {
+  addTaskItem(): void {
     return;
   }
 }
@@ -40,6 +43,8 @@ describe('AddComponent', () => {
         MatInputModule,
         MatSelectModule,
         MatDatepickerModule,
+        MatNativeDateModule,
+        ToastrModule.forRoot(),
       ],
       declarations: [AddComponent],
       providers: [{ provide: StorageService, useClass: MockStorageService }],
@@ -69,17 +74,14 @@ describe('AddComponent', () => {
       MatInputHarness.with({ selector: '[formControlName="scheduledDate"]' }),
     );
 
-    const expectedDate = new Date(2024, 11, 25); // December 25, 2024 (Note: Month is 0-based)
+    const expectedDate = new Date(2024, 11, 25);
 
-    // ✅ Instead of setting a string, set the value using FormControl
     component.taskForm.controls['scheduledDate'].setValue(expectedDate);
     fixture.detectChanges();
 
-    // ✅ Retrieve and check the displayed input value
     const inputValue = await dateInput.getValue();
-    expect(inputValue).toContain('12/25/2024'); // Adjust format based on locale
+    expect(inputValue).toContain('12/25/2024');
 
-    // ✅ Verify that the form control holds the correct Date object
     expect(component.taskForm.controls['scheduledDate'].value).toEqual(
       expectedDate,
     );
@@ -101,27 +103,46 @@ describe('AddComponent', () => {
     const addButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '[data-testid="add-task"]' }),
     );
+  
     expect(await addButton.isDisabled()).toBeTruthy();
+  
     component['addTaskForm'].controls['title'].setValue('Invalid');
+    component['addTaskForm'].controls['title'].markAsTouched();
+    component['addTaskForm'].controls['title'].updateValueAndValidity();
     fixture.detectChanges();
+  
     expect(await addButton.isDisabled()).toBeTruthy();
-    component['addTaskForm'].controls['title'].setValue(
-      'This is a valid title',
-    );
+  
+    component['addTaskForm'].controls['title'].setValue('This is a valid title');
+    component['addTaskForm'].controls['title'].markAsTouched();
+    component['addTaskForm'].controls['title'].updateValueAndValidity();
     fixture.detectChanges();
+  
+    expect(await addButton.isDisabled()).toBeTruthy();
+  
+    const validDate = new Date();
+    validDate.setDate(validDate.getDate() + 3);
+  
+    component['addTaskForm'].controls['scheduledDate'].setValue(validDate);
+    component['addTaskForm'].controls['priority'].setValue(TaskPriority.MEDIUM);
+  
+    component['addTaskForm'].markAllAsTouched();
+    component['addTaskForm'].updateValueAndValidity();
+    fixture.detectChanges();
+  
     expect(await addButton.isDisabled()).toBeFalsy();
   });
 
   it(`should create a new task for a valid submission and navigate home`, async () => {
     jest.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
     jest.spyOn(component, 'onSubmit');
-    jest.spyOn(storageService, 'updateTaskItem').mockResolvedValue();
+    jest.spyOn(storageService, 'addTaskItem').mockResolvedValue();
     component['addTaskForm'].controls['title'].setValue('Adding a test task');
     component['addTaskForm'].controls['description'].setValue(
       'This task should be added to the list',
     );
     component['addTaskForm'].controls['scheduledDate'].setValue(
-      new Date('2024-12-25'),
+      new Date('2025-02-15'),
     );
     fixture.detectChanges();
     const addButton = await loader.getHarness(
@@ -130,13 +151,13 @@ describe('AddComponent', () => {
     await addButton.click();
     fixture.detectChanges();
     expect(component.onSubmit).toBeCalledTimes(1);
-    expect(storageService.updateTaskItem).toBeCalledTimes(1);
-    expect(storageService.updateTaskItem).toBeCalledWith(
+    expect(storageService.addTaskItem).toBeCalledTimes(1);
+    expect(storageService.addTaskItem).toBeCalledWith(
       expect.objectContaining({
         isArchived: false,
         title: 'Adding a test task',
         description: 'This task should be added to the list',
-        scheduledDate: new Date('2024-12-25'),
+        scheduledDate: new Date('2025-02-15'),
       }),
     );
     expect(router.navigateByUrl).toHaveBeenCalledWith('/');

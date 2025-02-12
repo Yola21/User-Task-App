@@ -1,13 +1,23 @@
 <div class="container">
-  <h1>Tasks</h1>
+  <h1>My Daily Tasks</h1>
   <h3>Total Tasks: {{ tasksService.tasks.length }}</h3>
-  <take-home-filters-component></take-home-filters-component>
-  <take-home-search-component></take-home-search-component>
-  <div class="action-button-row">
-    <button data-testid="add-task" mat-button (click)="onAddTask()">
-      Add Task
-    </button>
+
+  <div class="filters-row">
+    <take-home-filters-component></take-home-filters-component>
   </div>
+
+  <div class="top-bar">
+    <div class="search">
+      <take-home-search-component></take-home-search-component>
+    </div>
+    <div class="add-task-button">
+      <button data-testid="add-task" mat-flat-button color="primary" (click)="onAddTask()">
+        <mat-icon>add</mat-icon>
+        Add Task
+      </button>
+    </div>
+  </div>
+
   <div class="tasks">
     <ng-container *ngFor="let item of tasksService.tasks">
       <mat-card [class.complete]="item.completed">

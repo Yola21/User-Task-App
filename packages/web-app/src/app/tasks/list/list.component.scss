@@ -1,27 +1,102 @@
 .container {
-  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--layout-padding);
+  gap: var(--layout-gap-size);
+  width: 100%;
 
-  .action-button-row {
+  h1, h3 {
+    text-align: center;
+    color: var(--primary-color);
+  }
+
+  .filters-row {
+    width: 100%;
+    max-width: var(--layout-width-max);
     display: flex;
-    justify-content: flex-start;
-    gap: var(--layout-gap-size);
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .top-bar {
+    width: 100%;
+    max-width: var(--layout-width-max);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--layout-padding);
+
+    .search {
+      flex-grow: 1;
+      display: flex;
+      justify-content: flex-start;
+
+      take-home-search-component {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+
+    .add-task-button {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        font-weight: bold;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        transition: 0.3s ease-in-out;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
   }
 
   .tasks {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
-    margin: 5px;
-    width: min(calc(100vw - var(--layout-padding)), var(--layout-width-max));
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
     gap: var(--layout-gap-size);
 
     mat-card {
       padding: var(--layout-padding);
+      width: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
       &.complete {
         background-color: var(--success-color);
       }
+
       .high-priority {
         color: var(--error-color);
       }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .search,
+    .add-task-button {
+      width: 100%;
+      justify-content: center;
     }
   }
 }

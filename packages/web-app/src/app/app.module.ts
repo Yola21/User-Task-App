@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-// import {MatNativeDateModule} from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,6 +23,7 @@ import { SearchComponent } from './tasks/search/search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 import { StorageService } from './storage/storage.service';
 
 const routes: Route[] = [
@@ -75,10 +75,10 @@ const routes: Route[] = [
     MatProgressBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    // MatNativeDateModule,
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot(),
     RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' }),
   ],
   bootstrap: [AppComponent],

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Task, TaskPriority } from '@take-home/shared';
 import { StorageService } from '../../storage/storage.service';
 import { faker } from '@faker-js/faker';
+import { ToastrService } from 'ngx-toastr';
 import { scheduled } from 'rxjs';
 
 @Component({
@@ -32,7 +33,7 @@ export class AddComponent {
     return this.addTaskForm;
   }
 
-  constructor(private storageService: StorageService, private router: Router) {}
+  constructor(private storageService: StorageService, private router: Router, private toastr: ToastrService) {}
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -51,10 +52,13 @@ export class AddComponent {
     };
 
     this.storageService.addTaskItem(newTask);
-    this.router.navigate(['']);
+    this.router.navigateByUrl('/');
+    this.toastr.success('Task added successfully!', 'Success', {
+      positionClass: 'toast-bottom-center'
+    });
   }
 
   onCancel(): void {
-    this.router.navigate(['']);
+    this.router.navigateByUrl('/');
   }
 }
