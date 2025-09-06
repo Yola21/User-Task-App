@@ -39,5 +39,3 @@ This app enables users to efficiently create, search, filter, and manage their d
 
 ---
 
-## 📂 Project Structure
-
